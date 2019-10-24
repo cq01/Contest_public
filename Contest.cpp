@@ -2,24 +2,46 @@
 #include <iostream>
 #include<cmath>
 using namespace std;
-int fb(const int& n);
+void pr(const int& n);
 int main()
 {
 	int n;
 	while (cin>>n)
 	{
-		cout << fb(n) << endl;
+		pr(n);
 	}
 }
-
-int fb(const int& n)
+void pr(const int& n)
 {
-	int a = 1, b = 1,t ;
-	for (int i = 0; i < n; ++i)
+	if (n == 1)
 	{
-		t = a;
-		a = b;
-		b += t;
+		cout << "*\n";
 	}
-	return a;
+	else if (n == 2)
+	{
+		cout << "**\n**\n";
+	}
+	else
+	{
+		for (int i = 0; i < n; ++i)
+		{
+			cout << '*';
+		}
+		cout << '\n';
+		for (int i = 0; i < n - 2; ++i)
+		{
+			cout << '*';
+			for (int j = 0; j < n - 2; ++j)
+			{
+				cout << ' ';
+			}
+			cout << "*\n";
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			cout << '*';
+		}
+		cout << '\n';
+	}
+	cout<<'\n';
 }
