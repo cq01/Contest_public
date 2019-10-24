@@ -3,11 +3,16 @@
 using namespace std;
 int main()
 {
-	int a, b, c, s;
-	while (cin>>a>>b>>c)
+	int a;
+	while (cin >> a)
 	{
-		s = a > b ? (b > c ? c : b) : (a > c ? c : a);
-		cout << s << endl;
+		for (int i = 0; i < 5; ++i)
+		{
+			cout << "  " << a % 10;
+			a /= 10;
+		}
+		cout << endl;
 	}
+
 }
 
