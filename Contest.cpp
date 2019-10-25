@@ -1,41 +1,40 @@
 ﻿//Copyright by cq01, 2019 Licensed under the MIT license : http://www.opensource.org/licenses/mit-license.php
-#include <iostream>
+#include<iostream>
+#include<string>
+#include<cstring>
 using namespace std;
 int main()
 {
-	int s[10] = { 0 };
-	for (int i = 0; i < 10; ++i)
-	{
-		cin >> s[i];
-	}
-	int a;
-	while (cin >> a)
-	{
-		int j;
-		for (j = 0; j < 10; ++j)
-		{
-			if (a < s[j])
-			{
-				break;
-			}
-		}
-		if (j < 10)
-		{
 
-			for (int k = 9; k > j; --k)
-			{
-				s[k] = s[k - 1];
-			}
-			s[j] = a;
-		}
-		for (int l = 0; l < 10; ++l)
+	char s[128];
+	char op[4];
+	int x, n;
+	cin >> s;
+	string str(s);
+	while (cin >> op)
+	{
+		if (!strcmp(op, "ADD"))
 		{
-			if (l)
-			{
-				cout << ' ';
-			}
-			cout << s[l];
+			cin >> s >> x;
+			str.insert(++x, s);
+			cout << str << endl;
 		}
-		cout << endl;
+		else if (!strcmp(op, "DEL"))
+		{
+			cin >> x >> n;
+			str.erase(x, n);
+			cout << str << endl;
+		}
+		else if (!strcmp(op, "SER"))
+		{
+			cin >> s;
+			cout << str.find(s) << endl;
+		}
+		else
+		{
+			cin >> s >> x;
+			str.replace(x, strlen(s), s);
+			cout << str << endl;
+		}
 	}
 }
