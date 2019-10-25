@@ -1,58 +1,31 @@
 ﻿//Copyright by cq01, 2019 Licensed under the MIT license : http://www.opensource.org/licenses/mit-license.php
 #include <iostream>
+#include<cstring>
 using namespace std;
-void pr(const int& n);
+int test(char str[]);
 int main()
 {
-	int n;
-	while (cin >> n)
+	char str[1024];
+	while (cin >> str)
 	{
-		pr(n);
+		if (test(str))
+		{
+			cout << "NO" << endl;
+		}
+		else
+		{
+			cout << "YES" << endl;
+		}
 	}
 }
-void pr(const int& n)
-{
-	int res[50][50] = { 0 };
-	int j = 0, k = 0;
-	for (int i = 1; i <= n; ++i)
-	{
-		res[j][k] = i;
-		if (j == 0)
-		{
-			j = k + 1;
-			k = 0;
-		}
-		else
-		{
-			--j;
-			++k;
-		}
-	}
-	for (int j = 0; j < 50; ++j)
-	{
-		if (res[j][0])
-		{
-			for (int k = 0; k < 50; ++k)
-			{
 
-				if (res[j][k])
-				{
-					if (k)
-					{
-						cout << ' ';
-					}
-					cout << res[j][k];
-				}
-				else
-				{
-					cout << endl;
-					break;
-				}
-			}
-		}
-		else
-		{
-			break;
-		}
+int test(char str[])
+{
+	int n = strlen(str);
+	int s = 0;
+	for (int i = 0; i < n / 2; ++i)
+	{
+		s += (str[i] != str[n - i - 1]);
 	}
+	return s;
 }
