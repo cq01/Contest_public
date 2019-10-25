@@ -4,14 +4,38 @@ using namespace std;
 int main()
 {
 	int s[10] = { 0 };
-	int a;
 	for (int i = 0; i < 10; ++i)
 	{
-		cin >> a;
-		s[a] = i;
+		cin >> s[i];
 	}
-	for (int i = 9; i >=0; --i)
+	int a;
+	while (cin >> a)
 	{
-		cout << i << ' ' << s[i] << endl;
+		int j;
+		for (j = 0; j < 10; ++j)
+		{
+			if (a < s[j])
+			{
+				break;
+			}
+		}
+		if (j < 10)
+		{
+
+			for (int k = 9; k > j; --k)
+			{
+				s[k] = s[k - 1];
+			}
+			s[j] = a;
+		}
+		for (int l = 0; l < 10; ++l)
+		{
+			if (l)
+			{
+				cout << ' ';
+			}
+			cout << s[l];
+		}
+		cout << endl;
 	}
 }
