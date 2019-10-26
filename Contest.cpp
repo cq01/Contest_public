@@ -1,66 +1,75 @@
 ﻿//Copyright by cq01, 2019 Licensed under the MIT license : http://www.opensource.org/licenses/mit-license.php
+// there is a bug that the oj system does not support any chinese char in cpp(only support ascii)
 #include <iostream>
-#include <cstring>
+#include<cmath>
 using namespace std;
-struct number
+struct dot
 {
-	number* next;
-	char data;
+	int x, y;
 };
-void creat(number*& head, char* s);
-void readDelete(number* &head);
-int main()
+inline double min(const double& a, const double& b)
 {
-	number* head = nullptr;
-	char s[256] = { 0 };
-	while (cin >> s)
-	{
-		creat(head, s);
-		readDelete(head);
-	}
-
+	return a < b ? a : b;
 }
 
-void creat(number*& head, char* s)
+
+inline bool equal(const double& a, const double& b)
 {
-	number* p = nullptr, * last = nullptr;
-	int n = (int)strlen(s);
-	for (int i = n - 1; i >= 0; --i)
+	return (fabs(a - b) < 1e-6);
+}
+
+inline double length(dot p1, dot p2)
+{
+	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+}
+
+inline void fill(dot p[4])
+{
+	for (int i = 0; i < 4; ++i)
 	{
-		p = last;
-		last = new number;
-		last->data = *(s + i);
-		if (head == nullptr)
+		cin >> p[i].x >> p[i].y;
+	}
+}
+
+bool isthis(dot p[4])
+{
+	int s= -4;
+
+	double n = min(length(p[0], p[1]), length(p[0], p[2]));
+
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = i + 1; j < 4; ++j)
 		{
-			head = last;
-			p = head;
+			s += (length(p[i], p[j]) == n);
+		}
+	}
+	if (s != 0)
+	{
+		return false;
+	}
+	for (int i = 0; i < 3; ++i)
+	{
+		s += equal(length(p[3], p[i]) / sqrt(2), n);
+	}
+	return s;
+}
+
+
+int main()
+{
+	dot point[4];
+	for (int i = 0; i < 3; ++i)
+	{
+
+		fill(point);
+		if (isthis(point))
+		{
+			cout << "yes" << endl;
 		}
 		else
 		{
-			if (p != nullptr)
-			{
-				p->next = last;
-			}
+			cout << "no" << endl;
 		}
 	}
-	if (last != nullptr)
-	{
-		last->next = nullptr;
-	}
-	p = nullptr;
-	last = nullptr;
-}
-void readDelete(number* &head)
-{
-	number* pt = nullptr;
-	while (head != nullptr)
-	{
-		cout << head->data;
-		pt = head;
-		head = pt->next;
-		delete pt;
-	}
-	pt = nullptr;
-	head = nullptr;// head 不为nullptr 下次调用会有异常
-	cout << endl;
 }
