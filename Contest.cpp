@@ -3,73 +3,131 @@
 #include <iostream>
 #include<cmath>
 using namespace std;
-struct dot
+
+inline int sgnInt(int x)
 {
-	int x, y;
-};
-inline double min(const double& a, const double& b)
-{
-	return a < b ? a : b;
+	return(x > 0 ? 1 : -1);
 }
-
-
-inline bool equal(const double& a, const double& b)
+inline int min(const int& x, const int& y)
 {
-	return (fabs(a - b) < 1e-6);
+	return x < y ? x : y;
 }
-
-inline double length(dot p1, dot p2)
+inline int minNotZero(const int& x, const int& y)// select the min but not zero one,else both are zero then return 0
 {
-	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
-}
-
-inline void fill(dot p[4])
-{
-	for (int i = 0; i < 4; ++i)
+	if (x)
 	{
-		cin >> p[i].x >> p[i].y;
-	}
-}
-
-bool isthis(dot p[4])
-{
-	int s= -4;
-
-	double n = min(length(p[0], p[1]), length(p[0], p[2]));
-
-	for (int i = 0; i < 3; ++i)
-	{
-		for (int j = i + 1; j < 4; ++j)
+		if (y)
 		{
-			s += (length(p[i], p[j]) == n);
+			return min(x, y);
 		}
+		return x;
 	}
-	if (s != 0)
+	return y;
+}
+
+inline bool inBoard(const int& a, const int& b, const int& m, const int& n)//check if in board
+{
+	if (a >= 1 && a <= m && b >= 1 && b <= n)
 	{
-		return false;
+		return true;
 	}
-	for (int i = 0; i < 3; ++i)
+	return false;
+}
+int tests(const int& i, int s, int a, int b, const int& c, const int& d, const int& m, const int& n, int success)
+{
+
+	if (success && s >= success - 1)//over
 	{
-		s += equal(length(p[3], p[i]) / sqrt(2), n);
+		return 0;
+	}
+	int r = 0;
+
+	switch (i)
+	{
+	case 0:a += 1; b += 2;  break;
+	case 1:a += 1; b += -2; break;
+	case 2:a += -1; b += 2; break;
+	case 3:a += -1; b += -2; break;
+	case 4:a += 2; b += 1; break;
+	case 5:a += 2; b += -1; break;
+	case 6:a += -2; b += 1; break;
+	case 7:a += -2; b += -1; break;
+	}
+	if (inBoard(a, b, m, n))
+	{
+		++s;
+	}
+	else
+	{
+		return 0;
+	}
+
+	if (a != c || b != d)
+	{
+		for (int j = 0; j < 8; ++j)
+		{
+			success = minNotZero(r, success);
+			r = tests(j, s, a, b, c, d, m, n, success);
+		}
+
+		s = minNotZero(r, success);
+
 	}
 	return s;
 }
-
-
+int beginTest(int a, int b, const int& c, const int& d, const int& m, const int& n)//begin test
+{
+	int sx = sgnInt(c - a), sy = sgnInt(d - b);
+	int r = 0, s = 0;//set search deep
+	int t = min(abs(c - a), abs(d - b)) * 2 / 3 - 4;
+	/*if (t > 0)
+	{
+		s = 2 * t;
+		a += sx * 3 * t;
+		b += sy * 3 * t;
+	}
+	int ax = abs(c - a);
+	int ay = abs(d - b);
+	if ((ax -ay)>4)
+	{
+		t = ax / 4 - 1;
+		s += 2 * t;
+		a += sx * 4 * t;
+	}
+	if ((ay - ax) > 4)
+	{
+		t = ay / 4 - 1;
+		s += 2 * t;
+		b += sy * 4 * t;
+	}*/
+	int max = s+min(abs(c - a) * abs(d - a) / 2 + 10, m * n - 1);
+	int success = max;
+	for (int j = 0; j < 8; ++j)
+	{
+		success = minNotZero(r, success);
+		r = tests(j, s, a, b, c, d, m, n, success);
+	}
+	success = minNotZero(r, success);
+	if (success <= max)
+	{
+		return success;
+	}
+	else
+	{
+		return 0;
+	}
+}
 int main()
 {
-	dot point[4];
-	for (int i = 0; i < 3; ++i)
+	int a, b, c, d, m, n, k;
+	while (cin >> k)
 	{
-
-		fill(point);
-		if (isthis(point))
+		for (int i = 0; i < k; ++i)
 		{
-			cout << "yes" << endl;
-		}
-		else
-		{
-			cout << "no" << endl;
+			cin >> m >> n;
+			cin >> a >> b >> c >> d;
+			int s = beginTest(a, b, c, d, m, n);
+			cout << s << endl;
 		}
 	}
 }
