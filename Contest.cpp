@@ -3,7 +3,6 @@
 #include <iostream>
 #include<cmath>
 using namespace std;
-
 inline int sgnInt(int x)
 {
 	return(x > 0 ? 1 : -1);
@@ -12,6 +11,47 @@ inline int min(const int& x, const int& y)
 {
 	return x < y ? x : y;
 }
+inline int max(const int& x, const int& y)
+{
+	return x > y ? x : y;
+}
+inline void swapInt(int& a, int& b)
+{
+	int t = a;
+	a = b;
+	b = t;
+}
+inline void span(int& a, int& b, int& c, int& d, const int& m, const int& n)
+{
+	int ix = sgnInt(c - a), iy = sgnInt(d - b);
+	if (ix == -1 && iy == -1)
+	{
+		swapInt(a, c);
+		swapInt(b, d);
+	}
+	if (ix == 1 && iy == -1)
+	{
+		b = n + 1 - b;
+		d = n + 1 - d;
+	}
+	if (ix == -1 && iy == 1)
+	{
+		a = m + 1 - a;
+		c = m + 1 - c;
+	}
+}
+inline void reduce(const int& a, const int& b, const int& c, const int& d, int& m, int& n)
+{
+	if (m - max(a, c) > 6)
+	{
+		m = max(a, c) + 6;
+	}
+	if (n - max(b, d) > 6)
+	{
+		n = max(b, d) + 6;
+	}
+}
+
 inline int minNotZero(const int& x, const int& y)// select the min but not zero one,else both are zero then return 0
 {
 	if (x)
@@ -45,12 +85,12 @@ int tests(const int& i, int s, int a, int b, const int& c, const int& d, const i
 	switch (i)
 	{
 	case 0:a += 1; b += 2;  break;
-	case 1:a += 1; b += -2; break;
-	case 2:a += -1; b += 2; break;
-	case 3:a += -1; b += -2; break;
-	case 4:a += 2; b += 1; break;
-	case 5:a += 2; b += -1; break;
-	case 6:a += -2; b += 1; break;
+	case 1:a += 2; b += 1; break;
+	case 2:a += 1; b += -2; break;
+	case 3:a += 2; b += -1; break;
+	case 4:a += -1; b += 2; break;
+	case 5:a += -2; b += 1; break;
+	case 6:a += -1; b += -2; break;
 	case 7:a += -2; b += -1; break;
 	}
 	if (inBoard(a, b, m, n))
@@ -75,20 +115,26 @@ int tests(const int& i, int s, int a, int b, const int& c, const int& d, const i
 	}
 	return s;
 }
-int beginTest(int a, int b, const int& c, const int& d, const int& m, const int& n)//begin test
+int beginTest(int a, int b, int& c, int& d, int& m, int& n)//begin test
 {
+	reduce(a, b, c, d, m, n);
+	span(a, b, c, d, m, n);//after,a<c,b<d
+	reduce(a, b, c, d, m, n);
 	int sx = sgnInt(c - a), sy = sgnInt(d - b);
 	int r = 0, s = 0;//set search deep
-	int t = min(abs(c - a), abs(d - b)) * 2 / 3 - 4;
-	/*if (t > 0)
+	int t,ax,ay;
+	ax = abs(c - a);
+	ay = abs(d - b);
+	t = min(ax, ay) * 2 / 3 - 4;
+	if (t > 0)
 	{
-		s = 2 * t;
+		s += 2 * t;
 		a += sx * 3 * t;
 		b += sy * 3 * t;
 	}
-	int ax = abs(c - a);
-	int ay = abs(d - b);
-	if ((ax -ay)>4)
+	ax = abs(c - a);
+	ay = abs(d - b);
+	if ((ax - ay) > 4)
 	{
 		t = ax / 4 - 1;
 		s += 2 * t;
@@ -99,8 +145,8 @@ int beginTest(int a, int b, const int& c, const int& d, const int& m, const int&
 		t = ay / 4 - 1;
 		s += 2 * t;
 		b += sy * 4 * t;
-	}*/
-	int max = s+min(abs(c - a) * abs(d - a) / 2 + 10, m * n - 1);
+	}
+	int max = s + min(abs(c - a) * abs(d - a) / 2 + 3, m * n - 1);
 	int success = max;
 	for (int j = 0; j < 8; ++j)
 	{
