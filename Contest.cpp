@@ -120,7 +120,7 @@ int beginTest(int a, int b, int& c, int& d, int& m, int& n)//begin test
 	reduce(a, b, c, d, m, n);
 	span(a, b, c, d, m, n);//after,a<c,b<d
 	reduce(a, b, c, d, m, n);
-	int sx = sgnInt(c - a), sy = sgnInt(d - b);
+	int sx = 1, sy = 1;
 	int r = 0, s = 0;//set search deep
 	int t,ax,ay;
 	ax = abs(c - a);
