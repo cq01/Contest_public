@@ -1,43 +1,51 @@
 ﻿//Copyright by cq01, 2019 Licensed under the MIT license : http://www.opensource.org/licenses/mit-license.php
 #include <iostream>
-#include <iomanip>
 #include <cstring>
+#include <algorithm>
 using namespace std;
-#define clearA(a) memset((a),0,sizeof(a))
-
+const int tableSize = 25;
+const int primeTable[tableSize] = { 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97 };
+bool isPrime(int x)
+{
+	for (int i = 0; i < tableSize; ++i)
+	{
+		if (x == primeTable[i])
+		{
+			return true;
+		}
+	}
+	return false;
+}
 int main()
 {
-	int m = 0, n = 0;
-	bool pic[10000];
-
-	int tempN = 0;
-	while (cin >> m >> n)
+	char str[128];
+	while (cin >> str)
 	{
-		clearA(pic);
-		for (int i = 0; i < m; ++i)
+		int num = strlen(str);
+		int times[26] = { 0,0,0,0,0,0 };
+		memset(times, 0, sizeof(times));
+		for (int i = 0; i < num; ++i)
 		{
-			for (int j = 0; j < n; ++j)
-			{
-				cin >> tempN;
-				pic[i * n + j] = bool(tempN);
-			}
+			++times[str[i] - 'a'];
 		}
-		for (int i = 0; i < m; ++i)
+		int minN = 200, maxN = 0;
+		for (int i = 0; i < 26; ++i)
 		{
-			for (int j = 0; j < n; ++j)
+			if (times[i])
 			{
-				cin >> tempN;
-				pic[i * n + j] ^= !(bool(tempN));
+				minN = min(minN, times[i]);
+				maxN = max(maxN, times[i]);
 			}
+
 		}
-		int countN = 0;
-		for (int i = 0; i < m; ++i)
+		int LW = maxN - minN;
+		if (isPrime(LW))
 		{
-			for (int j = 0; j < n; ++j)
-			{
-				countN += pic[i * n + j];
-			}
+			cout << "Lucky Word\n" << LW << endl;
 		}
-		cout << fixed << setprecision(2) << countN * 100 / double(m * n) << endl;
+		else {
+			cout << "No Answer\n0" << endl;
+		}
 	}
 }
+
