@@ -2,34 +2,30 @@
 #include <iostream>
 #include <cstring>
 #include <algorithm>
-#define clearA(a) memset((a),0,sizeof(a))
 using namespace std;
 int main()
 {
-	int n;
-	while (cin >> n)
+	int n, T;
+	while (cin >> T)
 	{
-		short Tlist[20000];
-		bool inL[5000];
-		clearA(inL);
-		clearA(Tlist);
-		int in;
-		int m = 0;
-		for (int i = 0; i < n; ++i)
+		for (int t = 0; t < T; ++t)
 		{
-
-			cin >> in;
-			if (!(inL[in]))
+			cin >> n;
+			for (int i = 0; i < n; ++i)
 			{
-				inL[in] = true;
-				Tlist[m++] = in;
+				for (int j = 0; j < n; ++j)
+				{
+					if (i == j || i + j == n - 1)
+					{
+						cout << 'X';
+					}
+					else if ((i + j < n - 1) || (j < i))
+					{
+						cout << ' ';
+					}
+				}
+				cout << endl;
 			}
 		}
-
-		for (int i = 0; i < m; ++i)
-		{
-			cout << Tlist[i] << ' ';
-		}
-		cout << endl;
 	}
 }
