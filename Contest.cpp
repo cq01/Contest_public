@@ -1,179 +1,249 @@
 ﻿//Copyright by cq01, 2019 Licensed under the MIT license : http://www.opensource.org/licenses/mit-license.php
-// there is a bug that the oj system does not support any chinese char in cpp(only support ascii)
-#include <iostream>
-#include<cmath>
+#include <bits/stdc++.h>
 using namespace std;
-inline int sgnInt(int x)
-{
-	return(x > 0 ? 1 : -1);
-}
-inline int min(const int& x, const int& y)
-{
-	return x < y ? x : y;
-}
-inline int max(const int& x, const int& y)
-{
-	return x > y ? x : y;
-}
-inline void swapInt(int& a, int& b)
-{
-	int t = a;
-	a = b;
-	b = t;
-}
-inline void span(int& a, int& b, int& c, int& d, const int& m, const int& n)
-{
-	int ix = sgnInt(c - a), iy = sgnInt(d - b);
-	if (ix == -1 && iy == -1)
-	{
-		swapInt(a, c);
-		swapInt(b, d);
-	}
-	if (ix == 1 && iy == -1)
-	{
-		b = n + 1 - b;
-		d = n + 1 - d;
-	}
-	if (ix == -1 && iy == 1)
-	{
-		a = m + 1 - a;
-		c = m + 1 - c;
-	}
-}
-inline void reduce(const int& a, const int& b, const int& c, const int& d, int& m, int& n)
-{
-	if (m - max(a, c) > 6)
-	{
-		m = max(a, c) + 6;
-	}
-	if (n - max(b, d) > 6)
-	{
-		n = max(b, d) + 6;
-	}
-}
+#define DEBUG
+#define clr(x) memset((x),0,sizeof(x))
 
-inline int minNotZero(const int& x, const int& y)// select the min but not zero one,else both are zero then return 0
-{
-	if (x)
-	{
-		if (y)
-		{
-			return min(x, y);
-		}
-		return x;
-	}
-	return y;
-}
+const int horizontal[8] = { 2,1,-1,-2,-2,-1,1,2 };
+const int vertical[8] = { -1,-2,-2,-1,1,2,2,1 };
 
-inline bool inBoard(const int& a, const int& b, const int& m, const int& n)//check if in board
-{
-	if (a >= 1 && a <= m && b >= 1 && b <= n)
-	{
-		return true;
-	}
-	return false;
-}
-int tests(const int& i, int s, int a, int b, const int& c, const int& d, const int& m, const int& n, int success)
-{
+bool S[500][500] = {};
+unsigned int L[500][500] = {};
 
-	if (success && s >= success - 1)//over
+struct Point
+{
+	int x, y;
+	unsigned int step;
+	bool inS()
 	{
-		return 0;
+		return S[x][y];
 	}
-	int r = 0;
-
-	switch (i)
+	void setS()
 	{
-	case 0:a += 1; b += 2;  break;
-	case 1:a += 2; b += 1; break;
-	case 2:a += 1; b += -2; break;
-	case 3:a += 2; b += -1; break;
-	case 4:a += -1; b += 2; break;
-	case 5:a += -2; b += 1; break;
-	case 6:a += -1; b += -2; break;
-	case 7:a += -2; b += -1; break;
+		S[x][y] = true;
 	}
-	if (inBoard(a, b, m, n))
+	void setL()
 	{
-		++s;
+		step = min(step, L[x][y]);
+		L[x][y] = step;
 	}
-	else
+	Point& equals(Point& current, int i)
 	{
-		return 0;
+		x = current.x + horizontal[i];
+		y = current.y + vertical[i];
+		step = current.step + 1;
+		setL();
+		return *this;
 	}
 
-	if (a != c || b != d)
+	Point(int x = 0, int y = 0, int step = 65535) :x(x), y(y), step(step)
 	{
-		for (int j = 0; j < 8; ++j)
-		{
-			success = minNotZero(r, success);
-			r = tests(j, s, a, b, c, d, m, n, success);
-		}
-
-		s = minNotZero(r, success);
-
+		setL();
 	}
-	return s;
-}
-int beginTest(int a, int b, int& c, int& d, int& m, int& n)//begin test
+	Point(Point& current, int i)
+	{
+		this->equals(current, i);
+	}
+	Point& operator =(Point& current)
+	{
+		x = current.x;
+		y = current.y;
+		step = current.step;
+		return *this;
+	}
+	Point& operator =(const Point& current)
+	{
+		x = current.x;
+		y = current.y;
+		step = current.step;
+		return *this;
+	}
+};
+bool operator ==(Point A, Point B)
 {
-	reduce(a, b, c, d, m, n);
-	span(a, b, c, d, m, n);//after,a<c,b<d
-	reduce(a, b, c, d, m, n);
-	int sx = 1, sy = 1;
-	int r = 0, s = 0;//set search deep
-	int t,ax,ay;
-	ax = abs(c - a);
-	ay = abs(d - b);
-	t = min(ax, ay) * 2 / 3 - 4;
-	if (t > 0)
-	{
-		s += 2 * t;
-		a += sx * 3 * t;
-		b += sy * 3 * t;
-	}
-	ax = abs(c - a);
-	ay = abs(d - b);
-	if ((ax - ay) > 4)
-	{
-		t = ax / 4 - 1;
-		s += 2 * t;
-		a += sx * 4 * t;
-	}
-	if ((ay - ax) > 4)
-	{
-		t = ay / 4 - 1;
-		s += 2 * t;
-		b += sy * 4 * t;
-	}
-	int max = s + min(abs(c - a) * abs(d - a) / 2 + 3, m * n - 1);
-	int success = max;
-	for (int j = 0; j < 8; ++j)
-	{
-		success = minNotZero(r, success);
-		r = tests(j, s, a, b, c, d, m, n, success);
-	}
-	success = minNotZero(r, success);
-	if (success <= max)
-	{
-		return success;
-	}
-	else
-	{
-		return 0;
-	}
+	return (A.x == B.x) && (A.y == B.y);
 }
+bool operator !=(Point A, Point B)
+{
+	return !(A == B);
+}
+bool operator < (Point A, Point B)
+{
+	return A.step < B.step;
+}
+bool operator > (Point A, Point B)
+{
+	return A.step > B.step;
+}
+void p(Point& current)
+{
+	cout << setw(4) << current.x << setw(4) << current.y << setw(4) << current.step << endl;
+}
+void span(int& m, int& n, int& a, int& b, int& c, int& d);
+void reduce(int& m, int& n, int& a, int& b, int& c, int& d);
+int search(int m, int n, int a, int b, int c, int d);
 int main()
 {
-	int a, b, c, d, m, n, k;
+#ifdef DEBUG
+	fstream in, out;
+	in.open("C:\\Users\\qi010\\Desktop\\cin.txt", ios::in);
+	out.open("C:\\Users\\qi010\\Desktop\\cout.txt", ios::app);
+	streambuf* stream_buffer_cout = cout.rdbuf();
+	streambuf* stream_buffer_cin = cin.rdbuf();
+	streambuf* stream_buffer_in = in.rdbuf();
+	streambuf* stream_buffer_out = out.rdbuf();
+	cin.rdbuf(stream_buffer_in);
+	cout.rdbuf(stream_buffer_out);
+#endif // DEBUG
+
+	std::ios::sync_with_stdio(false);
+	std::cin.tie(nullptr);
+	std::cout.tie(nullptr);
+	int k;
 	while (cin >> k)
 	{
-		for (int i = 0; i < k; ++i)
+		while (k--)
 		{
-			cin >> m >> n;
-			cin >> a >> b >> c >> d;
-			int s = beginTest(a, b, c, d, m, n);
-			cout << s << endl;
+			int m, n, a, b, c, d;
+			cin >> m >> n >> a >> b >> c >> d;
+#ifdef DEBUG
+			//cout << m << ' ' << n << ' ' << a << ' ' << b << ' ' << c << ' ' << d << endl;
+			span(m, n, a, b, c, d);
+			//cout << m << ' ' << n << ' ' << a << ' ' << b << ' ' << c << ' ' << d << endl;
+			reduce(m, n, a, b, c, d);
+			//cout << m << ' ' << n << ' ' << a << ' ' << b << ' ' << c << ' ' << d << endl;
+			double start = clock();
+			cout << search(m, n, a, b, c, d) << '\t';
+			cout << (clock() - start) / CLOCKS_PER_SEC << endl;
+#else
+			span(m, n, a, b, c, d);
+			reduce(m, n, a, b, c, d);
+			cout << search(m, n, a, b, c, d) << endl;
+#endif // DEBUG
+
+
 		}
+	}
+#ifdef DEBUG
+	in.close();
+	out.close();
+#endif // DEBUG
+
+}
+void span(int& m, int& n, int& a, int& b, int& c, int& d)
+{
+	auto dx = [&]()->int {return c - a; };
+	auto dy = [&]()->int {return d - b; };
+	if (dx() < 0)
+	{
+		if (dy() < 0)
+		{
+			a = m - 1 - a;
+			c = m - 1 - c;
+			b = n - 1 - b;
+			d = n - 1 - d;
+		}
+		else
+		{
+			a = m - 1 - a;
+			c = m - 1 - c;
+		}
+	}
+	else
+	{
+		if (dy() < 0)
+		{
+			b = n - 1 - b;
+			d = n - 1 - d;
+		}
+	}
+	if (dx())
+	{
+		;
+		if (dy() * 1.0 / dx() < 0.5)
+		{
+			swap(a, b);
+			swap(c, d);
+			swap(m, n);
+		}
+	}
+}
+void reduce(int& m, int& n, int& a, int& b, int& c, int& d)
+{
+	int max_size;
+	auto dx = [&]()->int {return c - a; };
+	auto dy = [&]()->int {return d - b; };
+	if (m > 10 && n > 10&&dx()>4)
+	{
+		max_size = 1;//>=1;
+	}
+	else
+	{
+		max_size = 3;
+	}
+	if (m > c + max_size&&dy()>4)
+	{
+		m = c + max_size;
+	}
+	if (n > d + max_size)
+	{
+		n = d + max_size;
+	}
+
+	if (a > max_size)
+	{
+		m -= a - max_size;
+		c -= a - max_size;
+		a = max_size;
+	}
+	if (b > max_size)
+	{
+		n -= b - max_size;
+		d -= b - max_size;
+		b = max_size;
+	}
+}
+int search(int m, int n, int a, int b, int c, int d)
+{
+	auto isCheck = [&](int x, int y)->bool {return ((x >= 0) && (x < m) && (y >= 0) && (y < n)); };
+	clr(S);
+	memset(L, UINT8_MAX, sizeof L);
+	Point Begin(a, b, 0), End(c, d, UINT_MAX);
+	priority_queue<Point, deque<Point>, greater<Point>> que;
+	que.push(Begin);
+	while ((!(que.empty())) && (que.top() != End))
+	{
+
+		Point t = que.top();
+		//p(t);
+		que.pop();
+
+		if (t.inS())
+		//if (S[t.x][t.y])
+		{
+			continue;
+		}
+		t.setS();
+		for (int i = 0; i < 8; ++i)
+		{
+			int x = t.x + horizontal[i];
+			int y = t.y + vertical[i];
+			unsigned step = t.step + 1;
+			if (S[x][y] || (L[x][y] <= step) || !(isCheck(x, y)))
+			{
+				continue;
+			}
+			Point temp(t, i);
+			//p(temp);
+			que.push(temp);
+		}
+	}
+	if (L[c][d] == 65535)
+	{
+		return 0;
+	}
+	else
+	{
+		return L[c][d];
 	}
 }
