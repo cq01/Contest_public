@@ -3,7 +3,15 @@
 using namespace std;
 
 #define clr(A) memset((A),0,sizeof(A))
-int search(int k);
+struct Reduce
+{
+	int sum;
+	int r;
+};
+bool operator<(const Reduce& x, const Reduce& y)
+{
+	return x.r > y.r;
+}
 int main()
 {
 	std::ios::sync_with_stdio(false);
@@ -12,30 +20,39 @@ int main()
 	int n;
 	while (cin >> n)
 	{
-		vector<int> T(n);
-		for (int i = 0; i < n; i++)
+		int goodPrice;
+		bool is8;
+		double sum1 = 0;
+		double sum2 = 0;
+		for (int i = 0; i < n; ++i)
 		{
-			cin >> T[i];
+			cin >> goodPrice;
+			cin >> is8;
+			sum1 += (is8 ? (goodPrice * 0.8) : goodPrice);
+			sum2 += goodPrice;
 		}
-		int t;
-		cin >> t;
-		int sum = T[n - 1] + t;
-		bool* yun = new bool[sum + 1];
-		memset(yun, 0, (sum + 1) * sizeof(bool));
-		for (int& t0 : T)
+		int m;
+		cin >> m;
+		//priority_queue<Reduce,queue<Reduce>,less<Reduce>> plan;
+		vector<Reduce> plan(m);
+		for (int i = 0; i < m; ++i)
 		{
-			for (int i = t0; i < t0 + t; i++)
+			Reduce x;
+			cin >> x.sum >> x.r;
+			plan.push_back(x);
+		}
+		sort(plan.begin(), plan.end());
+		//while (!(plan.empty()))
+		for (int i = 0; i < m; i++)
+		{
+			const Reduce& x = plan[i];
+			if (sum2 >= x.sum)
 			{
-				yun[i] = true;
+				sum2 -= x.r;
+				break;
 			}
 		}
-		int Tsum = 0;
-		for (int i = 0; i < sum + 1; i++)
-		{
-			Tsum += yun[i];
-		}
-		cout << Tsum << endl;
-		delete[] yun;
+		cout << fixed << setprecision(2) << min(sum1, sum2) << endl;
 	}
 }
 
