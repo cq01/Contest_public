@@ -3,14 +3,20 @@
 using namespace std;
 
 #define clr(A) memset((A),0,sizeof(A))
-struct Reduce
+int search(int a, int b);
+int total(int n)
 {
-	int sum;
-	int r;
-};
-bool operator<(const Reduce& x, const Reduce& y)
-{
-	return x.r > y.r;
+	if (!n)
+	{
+		return 0;
+	}
+	int sum = 0;
+	int maxShu = n / 2;
+	for (int i = 0; i <= maxShu; i++)
+	{
+		sum += search(n - 2 * i, i);
+	}
+	return sum;
 }
 int main()
 {
@@ -18,41 +24,38 @@ int main()
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
 	int n;
+	/*for (int i = 1; i < 100; i++)
+	{
+		cout << i <<' '<< log(total(i))/i << endl;
+	}*/
 	while (cin >> n)
 	{
-		int goodPrice;
-		bool is8;
-		double sum1 = 0;
-		double sum2 = 0;
-		for (int i = 0; i < n; ++i)
-		{
-			cin >> goodPrice;
-			cin >> is8;
-			sum1 += (is8 ? (goodPrice * 0.8) : goodPrice);
-			sum2 += goodPrice;
-		}
-		int m;
-		cin >> m;
-		//priority_queue<Reduce,queue<Reduce>,less<Reduce>> plan;
-		vector<Reduce> plan(m);
-		for (int i = 0; i < m; ++i)
-		{
-			Reduce x;
-			cin >> x.sum >> x.r;
-			plan.push_back(x);
-		}
-		sort(plan.begin(), plan.end());
-		//while (!(plan.empty()))
-		for (int i = 0; i < m; i++)
-		{
-			const Reduce& x = plan[i];
-			if (sum2 >= x.sum)
-			{
-				sum2 -= x.r;
-				break;
-			}
-		}
-		cout << fixed << setprecision(2) << min(sum1, sum2) << endl;
+		
+		cout << total(n) << endl;
 	}
 }
-
+int place(int a, int b);
+int search(int a, int b)//a<=b
+{
+	if (a > b)
+	{
+		swap(a, b);
+	}//a<=b
+	return place(a, b + 1);
+}
+int place(int a, int b)
+{
+	if (a == 1)
+	{
+		return b;
+	}
+	if (!b)
+	{
+		return 0;
+	}
+	if (!a)
+	{
+		return 1;
+	}
+	return place(a - 1, b) + place(a, b - 1);
+}
