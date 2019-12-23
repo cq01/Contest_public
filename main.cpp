@@ -2,102 +2,52 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void Rome(int n);
+
 int main()
 {
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int n;
-	while (cin >> n)
+	int n, m;
+	while (cin >> n >> m)
 	{
-		Rome(n);
+		priority_queue<int, vector<int>, greater<int> > N, M;
+		int x;
+		//in
+		while (n--)
+		{
+			cin >> x;
+			N.push(x);
+		}
+		while (m--)
+		{
+			cin >> x;
+			M.push(x);
+		}
+		//out
+		bool notfirst = false;
+		while (!(N.empty()||M.empty()))
+		{
+			if (N.top()==M.top())
+			{
+				if (notfirst)
+				{
+					cout << ' ';
+				}
+				notfirst = true;
+				cout << N.top();
+				N.pop();
+				M.pop();
+			}
+			else if (N.top()<M.top())
+			{
+				N.pop();
+			}
+			else if (N.top()>M.top())
+			{
+				M.pop();
+			}
+		}
 		cout << endl;
 	}
-}
-
-void Rome(int n)
-{
-	while (n)
-	{
-		if (n >= 1000)
-		{
-			cout << 'M';
-			n -= 1000;
-			continue;
-		}
-		if (n >= 900)
-		{
-			cout << "CM";
-			n -= 900;
-			continue;
-		}
-		if (n >= 500)
-		{
-			cout << 'D';
-			n -= 500;
-			continue;
-		}
-		if (n >= 400)
-		{
-			cout << "CD";
-			n -= 400;
-			continue;
-		}
-		if (n >= 100)
-		{
-			cout << 'C';
-			n -= 100;
-			continue;
-		}
-		if (n >= 90)
-		{
-			cout << "XC";
-			n -= 90;
-			continue;
-		}
-		if (n >= 50)
-		{
-			cout << 'L';
-			n -= 50;
-			continue;
-		}
-		if (n >= 40)
-		{
-			cout << "XL";
-			n -= 40;
-			continue;
-		}
-		if (n >= 10)
-		{
-			cout << 'X';
-			n -= 10;
-			continue;
-		}
-		if (n >= 9)
-		{
-			cout << "IX";
-			n -= 9;
-			continue;
-		}
-		if (n >= 5)
-		{
-			cout << 'V';
-			n -= 5;
-			continue;
-		}
-		if (n >= 4)
-		{
-			cout << "IV";
-			n -= 4;
-			continue;
-		}
-		if (n)
-		{
-			cout << 'I';
-			--n;
-			continue;
-		}
-	}
-
 }
