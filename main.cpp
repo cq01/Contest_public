@@ -3,59 +3,63 @@
 using namespace std;
 
 #define clr(A) memset((A),0,sizeof(A))
-int search(int a, int b);
-int total(int n)
-{
-	if (!n)
-	{
-		return 0;
-	}
-	int sum = 0;
-	int maxShu = n / 2;
-	for (int i = 0; i <= maxShu; i++)
-	{
-		sum += search(n - 2 * i, i);
-	}
-	return sum;
-}
+int search(int k);
 int main()
 {
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int n;
-	/*for (int i = 1; i < 100; i++)
+	int k;
+	while (cin >> k)
 	{
-		cout << i <<' '<< log(total(i))/i << endl;
-	}*/
-	while (cin >> n)
-	{
-		
-		cout << total(n) << endl;
+		cin.get();
+		cout << search(k) << endl;
 	}
 }
-int place(int a, int b);
-int search(int a, int b)//a<=b
+
+int search(int k)
 {
-	if (a > b)
+	char str[257] = {};
+	int alph[26] = {};
+	clr(str);
+	clr(alph);
+	cin.getline(str, sizeof str);
+	int len = strlen(str);
+	for (char& c : str)
 	{
-		swap(a, b);
-	}//a<=b
-	return place(a, b + 1);
-}
-int place(int a, int b)
-{
-	if (a == 1)
-	{
-		return b;
+		if (c)
+		{
+			++alph[c - 'a'];
+		}
+		else
+		{
+			break;
+		}
 	}
-	if (!b)
+	for (char& c : str)
 	{
-		return 0;
+		if (c)
+		{
+			if (alph[c - 'a'] < k)
+			{
+				c = ' ';
+
+			}
+		}
+		else
+		{
+			break;
+		}
 	}
-	if (!a)
+	clr(alph);
+	int maxnum = 0;
+	int i = 0;
+	int n = 0;
+	stringstream ss(str);
+	string s;
+	while (ss >> s)
 	{
-		return 1;
+		maxnum = max(maxnum, int(s.length()));
 	}
-	return place(a - 1, b) + place(a, b - 1);
+	return 	maxnum;
 }
