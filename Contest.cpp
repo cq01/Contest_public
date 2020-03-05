@@ -5,67 +5,39 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 
-class Employee
+class Rectangle
 {
 protected:
-	string name, number;
-	double basicSalary;
+	ll length, width;
 public:
-	Employee() :basicSalary(2000) {}
-	void input()
+	Rectangle() :length(), width() {}
+	void set(ll l, ll w)
 	{
-		cin >> number >> name;
+		length = l;
+		width = w;
 	}
-	double pay()
+	ll S()
 	{
-		return basicSalary;
-	}
-	void print()
-	{
-		cout << name << ' ' << number << ' ' << pay() << endl;
+		return length * width;
 	}
 };
-class Salesman :protected Employee
+class Rectangular :protected Rectangle
 {
 protected:
-	double sales;
-	static double commrate;
+	ll height;
 public:
-	Salesman() :sales() {}
-	void input()
+	Rectangular() :height() {}
+	void set(ll l, ll w, ll h)
 	{
-		Employee::input();
-		cin >> sales;
+		Rectangle::set(l, w);
+		height = h;
 	}
-	double pay()
+	ll V()
 	{
-		return Employee::pay() + sales * commrate;
-	}
-	void print()
-	{
-		cout << name << ' ' << number << ' ' << pay() << endl;
+		return S() * height;
 	}
 };
-double Salesman::commrate = 5e-3;
-class Salesmanager :protected Salesman
-{
-protected:
-	double jobSalary;
-public:
-	Salesmanager() :jobSalary(3000) {}
-	void input()
-	{
-		Salesman::input();
-	}
-	double pay()
-	{
-		return Salesman::pay() + jobSalary;
-	}
-	void print()
-	{
-		cout << name << ' ' << number << ' ' << pay() << endl;
-	}
-};
+
 int main()
 {
 #ifdef DEBUG
@@ -83,13 +55,15 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	Employee a;
-	Salesman b;
-	Salesmanager c;
-	a.input();
-	b.input();
-	c.input();
-	a.print();
-	b.print();
-	c.print();
+	Rectangle s;
+	Rectangular v;
+	ll l, w, h;
+	while (cin >> l >> w)
+	{
+		s.set(l, w);
+		cout << s.S() << endl;
+		cin >> l >> w >> h;
+		v.set(l, w, h);
+		cout << v.V() << endl;
+	}
 }
