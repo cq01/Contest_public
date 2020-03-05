@@ -2,30 +2,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
+#define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 
-class Student
-{
-	ll score;
-	static ll total, count;
-public:
-	void scoretotalcount(int s)
-	{
-		total += score = s;
-		++count;
-	}
-	static ll sum()
-	{
-		return total;
-	}
-	static ll average()
-	{
-		return total / count;
-	}
-};
 
-ll Student::count = 0;
-ll Student::total = 0;
 int main()
 {
 #ifdef DEBUG
@@ -43,12 +23,16 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	Student stu[5];
-	ll input;
-	for (int i = 0; i < 5; ++i)
+	string str;
+	bool vis[10];
+	while (cin >> str)
 	{
-		cin >> input;
-		stu[i].scoretotalcount(input);
+		clr_0(vis);
+		for (auto it = str.rbegin(); it != str.rend(); ++it)
+		{
+			if (!vis[*it - '0'])cout << *it;
+			vis[*it - '0'] = true;
+		}
+		cout << endl;
 	}
-	cout << Student::sum() << ' ' << Student::average() << endl;
 }
