@@ -4,23 +4,21 @@ using namespace std;
 using ll = long long;
 //#define DEBUG
 
-class Book
+class Box
 {
+	ll length, width, height;
 public:
-	string bookname;
-	ll price, number;
-	Book() :price(), number() {}
-	ll display()
+	Box() = default;
+	Box(ll l, ll w, ll h) :length(l), width(w), height(h) {}
+	void setBox(ll l, ll w, ll h)
 	{
-		return price * number;
+		length = l;
+		width = w;
+		height = h;
 	}
-	ll borrow()
+	ll volume()
 	{
-		return --number;
-	}
-	ll restore()
-	{
-		return ++number;
+		return length * width * height;
 	}
 };
 
@@ -41,25 +39,11 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	Book aBook;
-	char op;
-	while (cin >> aBook.bookname >> aBook.price >> aBook.number)
+	ll l, w, h;
+	Box a;
+	while (cin >> l >> w >> h)
 	{
-		cout << aBook.bookname << ' ' << aBook.price << ' ' << aBook.number << endl;
-		for (int i = 0; i < 5; ++i)
-		{
-			cin >> op;
-			switch (op)
-			{
-			case 'B':
-				cout << aBook.borrow() << endl; break;
-			case 'R':
-				cout << aBook.restore() << endl; break;
-			case 'C':
-				cout << aBook.display() << endl; break;
-			default:
-				break;
-			}
-		}
+		a.setBox(l, w, h);
+		cout << a.volume() << endl;
 	}
 }
