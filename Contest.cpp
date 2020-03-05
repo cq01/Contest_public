@@ -5,38 +5,62 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 
-class Rectangle
+class Integer
 {
 protected:
-	ll length, width;
-public:
-	Rectangle() :length(), width() {}
-	void set(ll l, ll w)
-	{
-		length = l;
-		width = w;
-	}
-	ll S()
-	{
-		return length * width;
-	}
+	int n;
 };
-class Rectangular :protected Rectangle
+class Vector :public Integer
 {
 protected:
-	ll height;
+	int* v;
+	//vector<int> v;
 public:
-	Rectangular() :height() {}
-	void set(ll l, ll w, ll h)
+	void set(int _n)
 	{
-		Rectangle::set(l, w);
-		height = h;
+		n = _n;
+		v = new int[n]();
+		//v.clear();
+		//v.resize(n);
+		for (int i = 0; i < n; ++i)cin >> v[i];
 	}
-	ll V()
+	const Vector& print()const
 	{
-		return S() * height;
+		for (int i = 0; i < n; ++i)
+		{
+			if (i)cout << ' ';
+			cout << v[i];
+		}
+		cout << endl;
+		return *this;
+	}
+	Vector operator+(const Vector& ano)const
+	{
+		Vector ret;
+		ret.n = n;
+		ret.v = new int[n]();
+		//ret.v.resize(n);
+		for (int i = 0; i < n; ++i)ret.v[i] = v[i] + ano.v[i];
+		return ret;
+	}
+
+	Vector operator-(const Vector& ano)const
+	{
+		Vector ret;
+		ret.n = n;
+		ret.v = new int[n]();
+		//ret.v.resize(n);
+		for (int i = 0; i < n; ++i)ret.v[i] = v[i] - ano.v[i];
+		return ret;
+	}
+	int operator*(const Vector& ano)const
+	{
+		int ret = 0;
+		for (int i = 0; i < n; ++i)ret += v[i] * ano.v[i];
+		return ret;
 	}
 };
+
 
 int main()
 {
@@ -55,15 +79,14 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	Rectangle s;
-	Rectangular v;
-	ll l, w, h;
-	while (cin >> l >> w)
+	int num;
+	Vector v1, v2;
+	while (cin >> num)
 	{
-		s.set(l, w);
-		cout << s.S() << endl;
-		cin >> l >> w >> h;
-		v.set(l, w, h);
-		cout << v.V() << endl;
+		v1.set(num);
+		v2.set(num);
+		(v1 + v2).print();
+		(v1 - v2).print();
+		cout << v1 * v2 << endl;
 	}
 }
