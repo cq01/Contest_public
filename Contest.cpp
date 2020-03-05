@@ -4,24 +4,28 @@ using namespace std;
 using ll = long long;
 //#define DEBUG
 
-class Box
+class Student
 {
-	ll length, width, height;
+	ll score;
+	static ll total, count;
 public:
-	Box() = default;
-	Box(ll l, ll w, ll h) :length(l), width(w), height(h) {}
-	void setBox(ll l, ll w, ll h)
+	void scoretotalcount(int s)
 	{
-		length = l;
-		width = w;
-		height = h;
+		total += score = s;
+		++count;
 	}
-	ll volume()
+	static ll sum()
 	{
-		return length * width * height;
+		return total;
+	}
+	static ll average()
+	{
+		return total / count;
 	}
 };
 
+ll Student::count = 0;
+ll Student::total = 0;
 int main()
 {
 #ifdef DEBUG
@@ -39,11 +43,12 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	ll l, w, h;
-	Box a;
-	while (cin >> l >> w >> h)
+	Student stu[5];
+	ll input;
+	for (int i = 0; i < 5; ++i)
 	{
-		a.setBox(l, w, h);
-		cout << a.volume() << endl;
+		cin >> input;
+		stu[i].scoretotalcount(input);
 	}
+	cout << Student::sum() << ' ' << Student::average() << endl;
 }
