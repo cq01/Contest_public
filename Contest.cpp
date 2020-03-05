@@ -5,6 +5,16 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 
+class S
+{
+public:
+	string str;
+	friend string operator+(const S& A, const S& B);
+};
+string operator+(const S& A, const S& B)
+{
+	return A.str + B.str;
+}
 
 int main()
 {
@@ -23,16 +33,9 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	string str;
-	bool vis[10];
-	while (cin >> str)
+	S x1, x2;
+	while (cin >> x1.str >> x2.str)
 	{
-		clr_0(vis);
-		for (auto it = str.rbegin(); it != str.rend(); ++it)
-		{
-			if (!vis[*it - '0'])cout << *it;
-			vis[*it - '0'] = true;
-		}
-		cout << endl;
+		cout << x1 + x2 << endl;
 	}
 }
