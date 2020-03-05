@@ -5,16 +5,19 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 
-class S
+class Integer
 {
 public:
-	string str;
-	friend string operator+(const S& A, const S& B);
+	int x;
+	friend int operator+(const Integer& a, const Integer& b);
+	friend int operator-(const Integer& a, const Integer& b);
+	friend int operator*(const Integer& a, const Integer& b);
+	friend int operator/(const Integer& a, const Integer& b);
 };
-string operator+(const S& A, const S& B)
-{
-	return A.str + B.str;
-}
+int operator+(const Integer& a, const Integer& b) { return a.x + b.x; }
+int operator-(const Integer& a, const Integer& b) { return a.x - b.x; }
+int operator*(const Integer& a, const Integer& b) { return a.x * b.x; }
+int operator/(const Integer& a, const Integer& b) { return a.x / b.x; }
 
 int main()
 {
@@ -33,9 +36,18 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	S x1, x2;
-	while (cin >> x1.str >> x2.str)
+	char op;
+	Integer a, b;
+	while (cin >> op >> a.x >> b.x)
 	{
-		cout << x1 + x2 << endl;
+		switch (op)
+		{
+		case '+':cout << a + b << endl; break;
+		case '-':cout << a - b << endl; break;
+		case '*':cout << a * b << endl; break;
+		case '/':cout << a / b << endl; break;
+		default:
+			break;
+		}
 	}
 }
