@@ -4,32 +4,52 @@ using namespace std;
 using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
-
-class Circle
+class Employee
 {
 public:
-	virtual int area() = 0;
-	virtual int volume() = 0;
-	int radius;
+	char name[256];
+	Employee() :name() {}
+	virtual int pay() = 0;
+
 protected:
-	static constexpr int pi = 3;
+	static int basic;
 };
-
-class Sphere :public Circle
+int Employee::basic = 2000;
+class Teacher :public Employee
+{
+	static int levelpay[3];
+public:
+	int level;
+	int classtime;
+	Teacher() :level(), classtime() {}
+	int pay()
+	{
+		return basic + classtime * levelpay[level - 1];
+	}
+};
+int Teacher::levelpay[3] = { 50,30,20 };
+class Admin :public Employee
 {
 public:
-	int hight;
-	int area();
-	int volume();
+	int work;
+	Admin() :work() {}
+	int pay()
+	{
+		return basic + work;
+	}
 };
-class Column :public Circle
+class Worker :public Employee
 {
+	static int payperday;
 public:
-	int hight;
-	Column() = default;
-	int area();
-	int volume();
+	int day;
+	Worker() :day() {}
+	int pay()
+	{
+		return basic + payperday * day;
+	}
 };
+int Worker::payperday = 20;
 int main()
 {
 #ifdef DEBUG
@@ -47,37 +67,16 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int r, h;
-	Circle* p;
-	Sphere s;
-	Column c;
-	while (cin >> r >> h)
+	Teacher a;
+	Admin b;
+	Worker c;
+	Employee* emp[] = { &a,&b,&c };
+	while (cin >> a.name >> a.level >> a.classtime >> b.name >> b.work >> c.name >> c.day)
 	{
-		s.radius = c.radius = r;
-		s.hight = h;
-		p = &c;
-		cout << p->volume() << ' ' << p->area() << ' ';
-		p = &s;
-		cout << p->volume() << ' ' << p->area() << ' ' << endl;
+		for (auto& p : emp)
+		{
+			cout << p->name << ' ' << p->pay() << endl;
+		}
 	}
-}
 
-int Sphere::area()
-{
-	return 2 * pi * radius * (radius + hight);
-}
-
-int Sphere::volume()
-{
-	return pi * radius * radius * hight;
-}
-
-int Column::area()
-{
-	return 4 * pi * radius * radius;
-}
-
-int Column::volume()
-{
-	return pi * 4 / 3 * radius * radius * radius;
 }
