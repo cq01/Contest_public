@@ -4,7 +4,32 @@ using namespace std;
 using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
-int mat[500][500];
+
+class Circle
+{
+public:
+	virtual int area() = 0;
+	virtual int volume() = 0;
+	int radius;
+protected:
+	static constexpr int pi = 3;
+};
+
+class Sphere :public Circle
+{
+public:
+	int hight;
+	int area();
+	int volume();
+};
+class Column :public Circle
+{
+public:
+	int hight;
+	Column() = default;
+	int area();
+	int volume();
+};
 int main()
 {
 #ifdef DEBUG
@@ -22,17 +47,37 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int n;
-	while (cin >> n)
+	int r, h;
+	Circle* p;
+	Sphere s;
+	Column c;
+	while (cin >> r >> h)
 	{
-		for (int i = 0; i < n; ++i)
-			for (int j = 0; j < n; ++j)
-				cin >> mat[j][n - 1 - i];
-		for (int i = 0; i < n; ++i)
-		{
-			for (int j = 0; j < n; ++j)
-				cout << mat[i][j] << ' ';
-			cout << endl;
-		}
+		s.radius = c.radius = r;
+		s.hight = h;
+		p = &c;
+		cout << p->volume() << ' ' << p->area() << ' ';
+		p = &s;
+		cout << p->volume() << ' ' << p->area() << ' ' << endl;
 	}
+}
+
+int Sphere::area()
+{
+	return 2 * pi * radius * (radius + hight);
+}
+
+int Sphere::volume()
+{
+	return pi * radius * radius * hight;
+}
+
+int Column::area()
+{
+	return 4 * pi * radius * radius;
+}
+
+int Column::volume()
+{
+	return pi * 4 / 3 * radius * radius * radius;
 }
