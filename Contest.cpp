@@ -8,7 +8,8 @@ class Employee
 {
 public:
 	char name[256];
-	Employee() :name() {}
+	Employee* next;
+	Employee() :name(), next() {}
 	virtual int pay() = 0;
 
 protected:
@@ -50,6 +51,42 @@ public:
 	}
 };
 int Worker::payperday = 20;
+Employee* read()
+{
+	Employee* head = new Teacher;
+	Teacher* p = static_cast<Teacher*>(head);
+	Teacher* q = p;
+	while (cin >> p->name >> p->level >> p->classtime)
+	{
+		q = p;
+		p = static_cast<Teacher*>(p->next = new Teacher());
+	}
+	delete static_cast<Teacher*>(p);
+	q->next = nullptr;
+	return head;
+}
+void print(Employee* head)
+{
+	int sum = 0, cnt = 0, low = INT_MAX, high = INT_MIN;
+	for (auto p = head; p; p = p->next)
+	{
+		const int& ppay = p->pay();
+		sum += ppay;
+		++cnt;
+		low = min(low, ppay);
+		high = max(high, ppay);
+	}
+	cout << sum << endl << sum / cnt << endl << high << endl << low << endl;
+}
+void del(Employee* head)
+{
+	for (auto p = head; p; )
+	{
+		auto temp = p;
+		p = p->next;
+		delete temp;
+	}
+}
 int main()
 {
 #ifdef DEBUG
@@ -67,16 +104,7 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	Teacher a;
-	Admin b;
-	Worker c;
-	Employee* emp[] = { &a,&b,&c };
-	while (cin >> a.name >> a.level >> a.classtime >> b.name >> b.work >> c.name >> c.day)
-	{
-		for (auto& p : emp)
-		{
-			cout << p->name << ' ' << p->pay() << endl;
-		}
-	}
-
+	Employee* head = read();
+	print(head);
+	del(head);
 }
