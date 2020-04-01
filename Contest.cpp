@@ -4,21 +4,66 @@ using namespace std;
 using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
-constexpr int maxn = 1e6;
+constexpr int maxn = int(1e6);
 template<typename T>
-class Average
+class List
 {
-	T sum;
-	int n;
-public:
-	Average() :sum(), n() {}
-	void add(T x)
+protected:
+	class node
 	{
-		sum += x;
-		++n;
+	public:
+		T val;
+		node* next;
+		node() :val(), next() {}
+	};
+	node* head;
+public:
+	List() :head() {}
+	void build(int cnt)
+	{
+		auto p = head, q = p;
+		T x;
+		for (int i = 0; i < cnt; ++i)
+		{
+			cin >> x;
+			if (!head)
+			{
+				p = head = new node();
+			}
+			p->val = x;
+			q = p;
+			p = p->next = new node();
+		}
+		delete p;
+		q->next = nullptr;
 	}
-	T cal() { return sum / n; }
+	void print()
+	{
+		auto p = head;
+		while (p)
+		{
+			cout << p->val << ' ';
+			p = p->next;
+		}
+		cout << endl;
+	}
+	void clear()
+	{
+		auto p = head, q = p;
+		while (p)
+		{
+			q = p;
+			p = p->next;
+			delete q;
+		}
+		head = nullptr;
+	}
+	~List()
+	{
+		clear();
+	}
 };
+
 
 int main()
 {
@@ -37,17 +82,7 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	Average<int> A;
-	Average<double> B;
-	int x;
-	double y;
-	for (int i = 0; i < 3; ++i)
-	{
-		cin >> x, A.add(x);
-	}
-	for (int i = 0; i < 3; ++i)
-	{
-		cin >> y, B.add(y);
-	}
-	cout << A.cal() << endl << setprecision(3) << fixed << B.cal() << endl;
+	List<int> a;
+	a.build(6);
+	a.print();
 }
