@@ -1,4 +1,5 @@
 ﻿//Copyright by cq01, 2019 Licensed under the MIT license : http://www.opensource.org/licenses/mit-license.php
+#define _USE_MATH_DEFINES
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
@@ -23,23 +24,16 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	string s;
-	while (cin >> s)
+	int x;
+	constexpr double c = 3.14159265 / 180;
+	while (cin >> x)
 	{
-		bool flag = false;
-		for (auto& val : s)
+		for (int i = 1; i <= x; ++i)
 		{
-			if (flag != bool(isdigit(val)))
-			{
-				putchar('*'); putchar(val);
-				flag = !flag;
-			}
-			else
-			{
-				putchar(val);
-			}
+			cout << left << setw(3) << i
+				<< setw(10) << fixed << setprecision(5) << sin(i * c)
+				<< setw(10) << cos(i * c)
+				<< tan(i * c) << endl;
 		}
-		if (flag)putchar('*');
-		putchar('\n');
 	}
 }
