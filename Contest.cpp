@@ -24,18 +24,14 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	string s1, s2;
-	while (cin >> s1 >> s2)
+	char str[32];
+	int cnt = 0;
+	while (cin.get(str, 17))
 	{
-		s1 += s2;
-		vector<string> strs;
-		size_t n = s1.size();
-		for (size_t i = 0; i < n; i += 8)
-		{
-			strs.push_back(s1.substr(i, 8));
-		}
-		sort(strs.begin(), strs.end());
-		for (auto& val : strs)cout << val;
-		cout << endl;
+		cnt += 16;
+		cout << setw(8) << setfill('0') << setbase(16) << cnt << "  ";
+		for (int i = 0; i < 16; ++i)
+			cout << setw(2) << setfill('0') << setbase(16) << int(str[i]) << ' ';
+		cout << ' ' << str << endl;
 	}
 }
