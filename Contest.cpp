@@ -24,64 +24,18 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	bool flag1 = false;//
-	bool flag2 = false;/**/
-	bool flag2_2 = false;
-	bool flag3 = false;// '
-	bool flag4 = false;//"
-	char ch;
-	while (EOF != (ch = getchar()))
+	string s1, s2;
+	while (cin >> s1 >> s2)
 	{
-		if (flag2_2)
+		s1 += s2;
+		vector<string> strs;
+		size_t n = s1.size();
+		for (size_t i = 0; i < n; i += 8)
 		{
-			flag2_2 = false;
-			if (ch == '\n')
-				continue;
+			strs.push_back(s1.substr(i, 8));
 		}
-		if (flag3 || flag4)
-		{
-			putchar(ch);
-			if (ch == '\'')flag3 = false;
-			if (ch == '\"')flag4 = false;
-			continue;
-		}
-		if (flag1)
-		{
-			if (ch == '\n')
-			{
-				flag1 = false;
-				putchar('\n');
-			}
-			continue;
-		}
-		if (flag2)
-		{
-			if (ch == '*' && '/' == (ch = getchar()))
-			{
-				flag2 = false;
-				flag2_2 = true;
-			}
-			continue;
-		}
-		if (ch == '/')
-		{
-			ch = getchar();
-			switch (ch)
-			{
-			case '/':flag1 = true; break;
-			case '*':flag2 = true; break;
-			default:putchar('/'); putchar(ch); break;
-			}
-			continue;
-		}
-		switch (ch)
-		{
-		case '\'':flag3 = true; break;
-		case '\"':flag4 = true; break;
-		case '\\':putchar('\\'); ch = getchar(); break;
-		default:
-			break;
-		}
-		putchar(ch);
+		sort(strs.begin(), strs.end());
+		for (auto& val : strs)cout << val;
+		cout << endl;
 	}
 }
