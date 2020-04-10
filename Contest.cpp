@@ -24,16 +24,64 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int x;
-	constexpr double c = 3.14159265 / 180;
-	while (cin >> x)
+	bool flag1 = false;//
+	bool flag2 = false;/**/
+	bool flag2_2 = false;
+	bool flag3 = false;// '
+	bool flag4 = false;//"
+	char ch;
+	while (EOF != (ch = getchar()))
 	{
-		for (int i = 1; i <= x; ++i)
+		if (flag2_2)
 		{
-			cout << left << setw(3) << i
-				<< setw(10) << fixed << setprecision(5) << sin(i * c)
-				<< setw(10) << cos(i * c)
-				<< tan(i * c) << endl;
+			flag2_2 = false;
+			if (ch == '\n')
+				continue;
 		}
+		if (flag3 || flag4)
+		{
+			putchar(ch);
+			if (ch == '\'')flag3 = false;
+			if (ch == '\"')flag4 = false;
+			continue;
+		}
+		if (flag1)
+		{
+			if (ch == '\n')
+			{
+				flag1 = false;
+				putchar('\n');
+			}
+			continue;
+		}
+		if (flag2)
+		{
+			if (ch == '*' && '/' == (ch = getchar()))
+			{
+				flag2 = false;
+				flag2_2 = true;
+			}
+			continue;
+		}
+		if (ch == '/')
+		{
+			ch = getchar();
+			switch (ch)
+			{
+			case '/':flag1 = true; break;
+			case '*':flag2 = true; break;
+			default:putchar('/'); putchar(ch); break;
+			}
+			continue;
+		}
+		switch (ch)
+		{
+		case '\'':flag3 = true; break;
+		case '\"':flag4 = true; break;
+		case '\\':putchar('\\'); ch = getchar(); break;
+		default:
+			break;
+		}
+		putchar(ch);
 	}
 }
