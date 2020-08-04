@@ -24,18 +24,26 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	ll n;
-	while (cin >> n)
+	string s;
+	while (cin >> s)
 	{
-		ll i = 1;
-		ll sum = 0;
-		while (n > 0)
+		for (auto& v : s)if (v == '5')v = ' ';
+		stringstream ss(s);
+		vector<ll> num;
+		ll x;
+		while (ss >> x)
 		{
-			ll d = min(i, n);
-			n -= d;
-			sum += i * d;
-			++i;
+			num.push_back(x);
 		}
-		cout << sum << endl;
+		sort(num.begin(), num.end());
+		auto it = num.begin();
+		cout << *it;
+		++it;
+		while (it != num.end())
+		{
+			cout << ' ' << *it;
+			++it;
+		}
+		cout << endl;
 	}
 }
