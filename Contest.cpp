@@ -6,60 +6,52 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 constexpr int maxn = int(1e5);
-bool isRun(int y)
+
+template<typename T>
+class Mat
 {
-	return y % 4 ? false : y % 100 ? true : y % 400 ? false : true;
-}
-int days(int y, int m)
-{
-	switch (m)
-	{
-	case 2:return 28 + isRun(y);
-	case 4:case 6: case 9: case 11:return 30;
-	default:return 31;
-	}
-}
-class Date
-{
-	int year, month, day;
 public:
-	Date(const Date&) = default;
-	Date(int y, int m, int d) :year(y), month(m), day(d)
+	vector<vector<T> > matrix;
+	void read(int n)
 	{
-	}
-	int nth()const
-	{
-		int m = 1, sum = day;
-		while (m < month)
+		matrix.resize(n);
+		for (auto& l : matrix)
 		{
-			sum += days(year, m);
-			++m;
+			l.resize(n);
+			for (auto& v : l)cin >> v;
 		}
-		return sum;
 	}
-	friend Date operator+(Date d, int n);
-	friend ostream& operator<<(ostream& out, const Date& d);
+	void print_max()
+	{
+		int n = matrix.size();
+		for (int i = 0; i < n; ++i)
+		{
+			if (i)cout << ' ';
+			auto maxnum = matrix[0][i];
+			for (int j = 0; j < n; ++j)
+			{
+				maxnum = max(maxnum, matrix[j][i]);
+			}
+			cout << maxnum;
+		}
+		cout << endl;
+	}
+	void print_90()
+	{
+		int n = matrix.size();
+		for (int i = 0; i < n; ++i)
+		{
+
+			for (int j = n - 1; j >= 0; --j)
+			{
+				if (j != n - 1)cout << ' ';
+				cout << matrix[j][i];
+			}
+			cout << endl;
+		}
+	}
 };
-ostream& operator<<(ostream& out, const Date& d)
-{
-	out << d.year << ' ' << d.month << ' ' << d.day;
-	return out;
-}
-Date operator+(Date d, int n)
-{
-	d.day += n;
-	while (days(d.year, d.month) < d.day)
-	{
-		d.day -= days(d.year, d.month);
-		d.month++;
-		if (d.month > 12)
-		{
-			d.month -= 12;
-			d.year++;
-		}
-	}
-	return d;
-}
+
 int main()
 {
 #ifdef DEBUG
@@ -77,11 +69,16 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int y, m, d;
-	while (cin >> y >> m >> d)
+	int n;
+	Mat<int> Mi;
+	Mat<char> Mc;
+	while (cin >> n)
 	{
-		Date t(y, m, d);
-		cout << t.nth() << endl;
-		cout << t + 1039 << endl;
+		Mi.read(n);
+		Mc.read(n);
+		Mi.print_max();
+		Mi.print_90();
+		Mc.print_max();
+		Mc.print_90();
 	}
-}
+		}
