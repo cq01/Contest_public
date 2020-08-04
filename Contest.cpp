@@ -6,7 +6,42 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 constexpr int maxn = int(1e6);
-
+class Time
+{
+	int hour, minute, second;
+public:
+	Time(int hh, int mm, int ss) :hour(hh), minute(mm), second(ss)
+	{
+	}
+	void print()
+	{
+		cout << hour << ':' << minute << ':' << second;
+	}
+	int toSec()const
+	{
+		return hour * 3600 + minute * 60 + second;
+	}
+};
+Time toTime(int t)
+{
+	return Time(t / 3600, t / 60 % 60, t % 60);
+}
+bool operator>(const Time& a, const Time& b)
+{
+	return a.toSec() > b.toSec();
+}
+bool operator<(const Time& a, const Time& b)
+{
+	return a.toSec() < b.toSec();
+}
+Time operator+(const Time& a, const Time& b)
+{
+	return toTime(a.toSec() + b.toSec());
+}
+Time operator-(const Time& a, const Time& b)
+{
+	return toTime(abs(a.toSec() - b.toSec()));
+}
 int main()
 {
 #ifdef DEBUG
@@ -24,26 +59,21 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	string s;
-	while (cin >> s)
+	int y, m, d;
+	int n;
+	while (cin >> n)
 	{
-		for (auto& v : s)if (v == '5')v = ' ';
-		stringstream ss(s);
-		vector<ll> num;
-		ll x;
-		while (ss >> x)
+		while (n--)
 		{
-			num.push_back(x);
+			cin >> y >> m >> d;
+			Time t1(y, m, d);
+			cin >> y >> m >> d;
+			Time t2(y, m, d);
+			(t1 + t2).print();
+			cout << ' ';
+			(t1 - t2).print();
+			cout << endl;
 		}
-		sort(num.begin(), num.end());
-		auto it = num.begin();
-		cout << *it;
-		++it;
-		while (it != num.end())
-		{
-			cout << ' ' << *it;
-			++it;
-		}
-		cout << endl;
 	}
+
 }
