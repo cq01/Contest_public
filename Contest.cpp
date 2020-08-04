@@ -24,14 +24,18 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	char str[32];
-	int cnt = 0;
-	while (cin.get(str, 17))
+	ll n;
+	while (cin >> n)
 	{
-		cnt += 16;
-		cout << setw(8) << setfill('0') << setbase(16) << cnt << "  ";
-		for (int i = 0; i < 16; ++i)
-			cout << setw(2) << setfill('0') << setbase(16) << int(str[i]) << ' ';
-		cout << ' ' << str << endl;
+		ll i = 1;
+		ll sum = 0;
+		while (n > 0)
+		{
+			ll d = min(i, n);
+			n -= d;
+			sum += i * d;
+			++i;
+		}
+		cout << sum << endl;
 	}
 }
