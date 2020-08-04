@@ -5,21 +5,47 @@ using namespace std;
 using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
-constexpr int maxn = int(1e6);
+constexpr int maxn = int(1e5);
 
-class Good
+class Circle
 {
 public:
-	static int cnt;
-	static double discount, sum;
-	Good(int num, double price)
+	double r;
+	Circle(double R) :r(R)
 	{
-		cnt += num;
-		sum += price * discount * num * (num >= 10 ? 0.98 : 1);
 	}
 };
-int Good::cnt = 0;
-double Good::discount = 1, Good::sum = 0;
+class Table
+{
+public:
+	double height;
+	Table(double h) :height(h)
+	{
+	}
+};
+
+class Roundtable :public Circle, public Table
+{
+public:
+	char* color;
+	Roundtable(double r, double h, const char* str) :Circle(r), Table(h)
+	{
+		size_t len = strlen(str) + 1;
+		color = new char[len];
+		memcpy(color, str, len);
+	}
+
+	~Roundtable()
+	{
+		delete[] color;
+		color = nullptr;
+	}
+	double fun()
+	{
+		return 3.14 * r * r;
+	}
+};
+
 int main()
 {
 #ifdef DEBUG
@@ -37,23 +63,17 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int n, m, num;
-	double p, d;
-	while (cin >> n)
-	{
-		while (n--)
-		{
-			Good::sum = 0;
-			Good::cnt = 0;
-			cin >> d >> m;
-			Good::discount = 1 - d;
-			while (m--)
-			{
-				cin >> num >> p;
-				Good(num, p);
-			}
-			cout << Good::sum << ' ' << Good::sum / Good::cnt << endl;
-		}
-	}
-
+	double r, h;
+	string s;
+	cout << "please input the data of round table:" << endl;
+	cout << "radius:" << endl;
+	cin >> r;
+	cout << "height:" << endl;
+	cin >> h;
+	cout << "color:" << endl;
+	cin >> s;
+	Roundtable tab(r, h, s.c_str());
+	cout << "height:" << (ll(tab.height * 100) / 100.0) << endl;
+	cout << "area:" << (ll(tab.fun() * 100) / 100.0) << endl;
+	cout << "color:" << tab.color << endl;
 }
