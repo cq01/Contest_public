@@ -7,44 +7,44 @@ using ll = long long;
 //#define DEBUG
 constexpr int maxn = int(1e5);
 
-class Circle
+class STR
 {
+	char* s;
 public:
-	double r;
-	Circle(double R) :r(R)
-	{
-	}
-};
-class Table
-{
-public:
-	double height;
-	Table(double h) :height(h)
-	{
-	}
-};
-
-class Roundtable :public Circle, public Table
-{
-public:
-	char* color;
-	Roundtable(double r, double h, const char* str) :Circle(r), Table(h)
+	STR(const char* str)
 	{
 		size_t len = strlen(str) + 1;
-		color = new char[len];
-		memcpy(color, str, len);
+		s = new char[len];
+		memcpy(s, str, len);
 	}
 
-	~Roundtable()
+	~STR()
 	{
-		delete[] color;
-		color = nullptr;
+		delete[] s;
+		s = nullptr;
 	}
-	double fun()
+	void move(char& t1, char& t2)
 	{
-		return 3.14 * r * r;
+		swap(t1, t2);
+	}
+	void print()
+	{
+		cout << s;
+	}
+	void fun()
+	{
+		int n = strlen(s);
+		int i = 0, j = n - 1;
+		while (i < j)
+		{
+			while (i < n && !isdigit(s[i]))++i;
+			while (j >= 0 && isdigit(s[j]))--j;
+			if (i >= j)break;
+			swap(s[i], s[j]);
+		}
 	}
 };
+
 
 int main()
 {
@@ -63,17 +63,12 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	double r, h;
 	string s;
-	cout << "please input the data of round table:" << endl;
-	cout << "radius:" << endl;
-	cin >> r;
-	cout << "height:" << endl;
-	cin >> h;
-	cout << "color:" << endl;
-	cin >> s;
-	Roundtable tab(r, h, s.c_str());
-	cout << "height:" << (ll(tab.height * 100) / 100.0) << endl;
-	cout << "area:" << (ll(tab.fun() * 100) / 100.0) << endl;
-	cout << "color:" << tab.color << endl;
+	while (cin >> s)
+	{
+		STR str(s.c_str());
+		str.fun();
+		str.print();
+		cout << endl;
+	}
 }
