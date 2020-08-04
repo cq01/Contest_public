@@ -6,42 +6,20 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 constexpr int maxn = int(1e6);
-class Time
+
+class Good
 {
-	int hour, minute, second;
 public:
-	Time(int hh, int mm, int ss) :hour(hh), minute(mm), second(ss)
+	static int cnt;
+	static double discount, sum;
+	Good(int num, double price)
 	{
-	}
-	void print()
-	{
-		cout << hour << ':' << minute << ':' << second;
-	}
-	int toSec()const
-	{
-		return hour * 3600 + minute * 60 + second;
+		cnt += num;
+		sum += price * discount * num * (num >= 10 ? 0.98 : 1);
 	}
 };
-Time toTime(int t)
-{
-	return Time(t / 3600, t / 60 % 60, t % 60);
-}
-bool operator>(const Time& a, const Time& b)
-{
-	return a.toSec() > b.toSec();
-}
-bool operator<(const Time& a, const Time& b)
-{
-	return a.toSec() < b.toSec();
-}
-Time operator+(const Time& a, const Time& b)
-{
-	return toTime(a.toSec() + b.toSec());
-}
-Time operator-(const Time& a, const Time& b)
-{
-	return toTime(abs(a.toSec() - b.toSec()));
-}
+int Good::cnt = 0;
+double Good::discount = 1, Good::sum = 0;
 int main()
 {
 #ifdef DEBUG
@@ -59,20 +37,22 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int y, m, d;
-	int n;
+	int n, m, num;
+	double p, d;
 	while (cin >> n)
 	{
 		while (n--)
 		{
-			cin >> y >> m >> d;
-			Time t1(y, m, d);
-			cin >> y >> m >> d;
-			Time t2(y, m, d);
-			(t1 + t2).print();
-			cout << ' ';
-			(t1 - t2).print();
-			cout << endl;
+			Good::sum = 0;
+			Good::cnt = 0;
+			cin >> d >> m;
+			Good::discount = 1 - d;
+			while (m--)
+			{
+				cin >> num >> p;
+				Good(num, p);
+			}
+			cout << Good::sum << ' ' << Good::sum / Good::cnt << endl;
 		}
 	}
 
