@@ -6,46 +6,60 @@ using ll = long long;
 #define clr_0(A) memset((A),0,sizeof(A))
 //#define DEBUG
 constexpr int maxn = int(1e5);
-
-class STR
+bool isRun(int y)
 {
-	char* s;
+	return y % 4 ? false : y % 100 ? true : y % 400 ? false : true;
+}
+int days(int y, int m)
+{
+	switch (m)
+	{
+	case 2:return 28 + isRun(y);
+	case 4:case 6: case 9: case 11:return 30;
+	default:return 31;
+	}
+}
+class Date
+{
+	int year, month, day;
 public:
-	STR(const char* str)
+	Date(const Date&) = default;
+	Date(int y, int m, int d) :year(y), month(m), day(d)
 	{
-		size_t len = strlen(str) + 1;
-		s = new char[len];
-		memcpy(s, str, len);
 	}
-
-	~STR()
+	int nth()const
 	{
-		delete[] s;
-		s = nullptr;
-	}
-	void move(char& t1, char& t2)
-	{
-		swap(t1, t2);
-	}
-	void print()
-	{
-		cout << s;
-	}
-	void fun()
-	{
-		int n = strlen(s);
-		int i = 0, j = n - 1;
-		while (i < j)
+		int m = 1, sum = day;
+		while (m < month)
 		{
-			while (i < n && !isdigit(s[i]))++i;
-			while (j >= 0 && isdigit(s[j]))--j;
-			if (i >= j)break;
-			swap(s[i], s[j]);
+			sum += days(year, m);
+			++m;
+		}
+		return sum;
+	}
+	friend Date operator+(Date d, int n);
+	friend ostream& operator<<(ostream& out, const Date& d);
+};
+ostream& operator<<(ostream& out, const Date& d)
+{
+	out << d.year << ' ' << d.month << ' ' << d.day;
+	return out;
+}
+Date operator+(Date d, int n)
+{
+	d.day += n;
+	while (days(d.year, d.month) < d.day)
+	{
+		d.day -= days(d.year, d.month);
+		d.month++;
+		if (d.month > 12)
+		{
+			d.month -= 12;
+			d.year++;
 		}
 	}
-};
-
-
+	return d;
+}
 int main()
 {
 #ifdef DEBUG
@@ -63,12 +77,11 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	string s;
-	while (cin >> s)
+	int y, m, d;
+	while (cin >> y >> m >> d)
 	{
-		STR str(s.c_str());
-		str.fun();
-		str.print();
-		cout << endl;
+		Date t(y, m, d);
+		cout << t.nth() << endl;
+		cout << t + 1039 << endl;
 	}
 }
