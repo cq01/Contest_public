@@ -2,37 +2,102 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define clear_array(x) memset((x),0,sizeof(x))
-
+void Rome(int n);
 int main()
 {
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 	std::cout.tie(nullptr);
-	int T;
-	while (cin >> T)
+	int n;
+	while (cin >> n)
 	{
-		for (int i = 0; i < T; ++i)
+		Rome(n);
+		cout << endl;
+	}
+}
+
+void Rome(int n)
+{
+	while (n)
+	{
+		if (n >= 1000)
 		{
-			stack<string> str_stack;
-			string str;
-			char c;
-			do
-			{
-				cin >> str;
-				str_stack.push(str);
-				c = cin.get();
-			} while (c != '\n');
-			do
-			{
-				cout << str_stack.top();
-				str_stack.pop();
-				if (!(str_stack.empty()))
-				{
-					cout << ' ';
-				}
-			} while (!(str_stack.empty()));
-			cout << endl;
+			cout << 'M';
+			n -= 1000;
+			continue;
+		}
+		if (n >= 900)
+		{
+			cout << "CM";
+			n -= 900;
+			continue;
+		}
+		if (n >= 500)
+		{
+			cout << 'D';
+			n -= 500;
+			continue;
+		}
+		if (n >= 400)
+		{
+			cout << "CD";
+			n -= 400;
+			continue;
+		}
+		if (n >= 100)
+		{
+			cout << 'C';
+			n -= 100;
+			continue;
+		}
+		if (n >= 90)
+		{
+			cout << "XC";
+			n -= 90;
+			continue;
+		}
+		if (n >= 50)
+		{
+			cout << 'L';
+			n -= 50;
+			continue;
+		}
+		if (n >= 40)
+		{
+			cout << "XL";
+			n -= 40;
+			continue;
+		}
+		if (n >= 10)
+		{
+			cout << 'X';
+			n -= 10;
+			continue;
+		}
+		if (n >= 9)
+		{
+			cout << "IX";
+			n -= 9;
+			continue;
+		}
+		if (n >= 5)
+		{
+			cout << 'V';
+			n -= 5;
+			continue;
+		}
+		if (n >= 4)
+		{
+			cout << "IV";
+			n -= 4;
+			continue;
+		}
+		if (n)
+		{
+			cout << 'I';
+			--n;
+			continue;
 		}
 	}
+
 }
